@@ -25,29 +25,26 @@ C=$(nproc 2>/dev/null)
 L=$(cut -d' ' -f1 /proc/loadavg 2>/dev/null)
 R=$(free -m | awk '/Mem:/{print $3"/"$2}')
 D=$(df -P / | awk 'NR==2{print $3"/"$2" "$5}')
+DFREE=$(df -BG -P / | awk 'NR==2{gsub("G","",$4); print $4}')
 J=$(nvidia-smi --query-compute-apps=pid --format=csv,noheader 2>/dev/null | grep -c . || echo 0)
-E=$(python3 - <<'PY' 2>/dev/null
-import sys
-try:
-    import importlib.metadata as M
-    def v(p):
-        try: return M.version(p)
-        except Exception: return None
-except Exception:
-    def v(p): return None
-libs=[('torch','torch'),('jax','jax'),('mjx','mujoco-mjx'),('mujoco','mujoco'),
-      ('playground','playground'),('mujoco_playground','mujoco_playground'),
-      ('brax','brax'),('flax','flax'),('numpy','numpy'),('pandas','pandas'),
-      ('sklearn','scikit-learn'),('statsmodels','statsmodels'),
-      ('transformers','transformers'),('tf','tensorflow')]
-parts=["py%d.%d"%sys.version_info[:2]]
-for s,pkg in libs:
-    ver=v(pkg)
-    if ver: parts.append(s+ver)
-print(";".join(parts))
-PY
-)
-echo "GPU=$G|NG=$NG|GALL=$GALL|CPU=$C|LOAD=$L|RAM=$R|DISK=$D|JOBS=$J|ENV=$E"
+OS=$(. /etc/os-release 2>/dev/null && echo "$VERSION_ID" || echo "?")
+GCC=$(command -v gcc >/dev/null 2>&1 && echo y || echo n)
+PYDEV=$(ls /usr/include/python3*/Python.h /opt/conda/include/python3*/Python.h 2>/dev/null | head -1 >/dev/null 2>&1 && echo y || echo n)
+NET=$(timeout 4 curl -sI -o /dev/null -w '%{http_code}' https://pypi.org 2>/dev/null || echo 0)
+# Pick the "richest" python: jobs often run from a venv/conda, not /usr/bin/python3.
+# Scan candidate interpreters with a one-line python -c (survives nested SSH heredoc).
+PYCANDS=$(ls /root/venv/bin/python /root/*/bin/python /opt/conda/bin/python /opt/conda/envs/*/bin/python /usr/bin/python3 2>/dev/null | awk '!seen[$0]++')
+PYSNIP='import sys,importlib.metadata as M
+def v(p):
+ try: return M.version(p)
+ except Exception: return None
+L=[("torch","torch"),("jax","jax"),("mjx","mujoco-mjx"),("mujoco","mujoco"),("playground","playground"),("mujoco_playground","mujoco_playground"),("brax","brax"),("flax","flax"),("numpy","numpy"),("pandas","pandas"),("sklearn","scikit-learn"),("statsmodels","statsmodels"),("transformers","transformers"),("tf","tensorflow")]
+f=[s+x for s,p in L for x in [v(p)] if x]
+pa=sys.argv[1]
+t="venv" if ("/venv/" in pa or "/envs/" in pa or "conda" in pa) else "sys"
+print("%d\t%s|py%d.%d[%s];%s"%(len(f),pa,sys.version_info[0],sys.version_info[1],t,";".join(f)))'
+E=$(for PYB in $PYCANDS; do "$PYB" -c "$PYSNIP" "$PYB" 2>/dev/null; done | sort -rn | head -1 | cut -f2-)
+echo "GPU=$G|NG=$NG|GALL=$GALL|CPU=$C|LOAD=$L|RAM=$R|DISK=$D|DFREE=$DFREE|JOBS=$J|OS=$OS|GCC=$GCC|PYDEV=$PYDEV|NET=$NET|ENV=$E"
 '''
 
 
@@ -100,6 +97,10 @@ def probe(host, port):
 
 def _parse(line):
     d = {}
+    # ENV is last and itself contains '|' (pybin|pyver;libs), so peel it off first.
+    if "|ENV=" in line:
+        line, env_val = line.split("|ENV=", 1)
+        d["ENV"] = env_val.strip()
     for part in line.split("|"):
         if "=" in part:
             k, v = part.split("=", 1)
@@ -142,7 +143,16 @@ def _parse(line):
         sz, pct = (disk.split() + ["?"])[:2]
         out["disk"] = sz; out["disk_pct"] = pct
     out["jobs"] = int(d.get("JOBS", "0") or 0)
-    out["env"] = d.get("ENV", "")
+    out["disk_free"] = d.get("DFREE", "?")        # GiB free on /
+    out["os"] = d.get("OS", "?")                  # ubuntu VERSION_ID
+    out["gcc"] = d.get("GCC", "?")                # y/n build toolchain
+    out["pydev"] = d.get("PYDEV", "?")            # y/n Python.h present
+    out["net"] = d.get("NET", "?")                # outbound HTTP code to pypi (200=ok)
+    env = d.get("ENV", "")                         # "<pybin>|py3.12[venv];jax...;..."
+    if "|" in env:
+        out["pybin"], out["env"] = env.split("|", 1)
+    else:
+        out["pybin"], out["env"] = "", env
     return out
 
 

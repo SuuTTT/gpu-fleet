@@ -66,7 +66,8 @@ def build_html(rows, ts, refresh, err):
          "data %ds old &middot; auto-refresh %ds</div>" % (age, refresh),
          "<table><thead><tr>"]
     for h in ["ID", "GPU", "state", "verdict", "GPU util", "gpu-mem MiB", "cpu", "load",
-              "ram MB", "disk", "jobs", "cuda", "project", "env (py + libs)", "ssh", "$/hr"]:
+              "ram MB", "disk", "free GB", "jobs", "os", "net", "build", "cuda",
+              "project", "env (py + libs)", "ssh", "$/hr"]:
         p.append("<th>%s</th>" % h)
     p.append("</tr></thead><tbody>")
     def _bar(u):
@@ -97,14 +98,25 @@ def build_html(rows, ts, refresh, err):
             dpct = 0
         dstyle = " style='color:#cf222e;font-weight:bold'" if dpct >= 90 else ""
         env = html.escape(pr.get("env", "") or "")
+        net = str(pr.get("net", "-"))
+        net_cell = ("<span style='color:#1a7f37'>ok</span>" if net == "200"
+                    else ("<span style='color:#cf222e'>%s</span>" % net if net not in ("-", "?") else "-"))
+        gcc = pr.get("gcc", "-"); pydev = pr.get("pydev", "-")
+        build = "gcc+dev" if (gcc == "y" and pydev == "y") else ("gcc" if gcc == "y" else ("-" if gcc in ("-", "?") else "no"))
+        bcol = "#1a7f37" if gcc == "y" else "#cf222e"
+        build_cell = "<span style='color:%s'>%s</span>" % (bcol, build)
+        dfree = pr.get("disk_free", "-")
         row = ("<tr><td>%s</td><td><b>%s</b></td><td>%s</td>"
                "<td><span style='color:%s;font-weight:bold'>%s</span></td><td>%s</td><td>%s</td>"
                "<td>%s</td><td>%s</td><td>%s</td><td%s>%s</td><td>%s</td><td>%s</td>"
+               "<td>%s</td><td>%s</td><td>%s</td><td>%s</td>"
                "<td>%s</td><td style='font-size:11px'>%s</td><td>%s</td><td>%.3f</td></tr>") % (
             r["id"], html.escape(r["gpu"]), html.escape(r["status"]),
             _vcolor(r["verdict"]), r["verdict"], ucell, gmem,
             pr.get("cpu", "-"), pr.get("load", "-"), pr.get("ram", "-"),
-            dstyle, disk, pr.get("jobs", "-"), html.escape(str(r.get("cuda", "?"))),
+            dstyle, disk, ("%sG" % dfree if dfree not in ("-", "?") else "-"),
+            pr.get("jobs", "-"), html.escape(str(pr.get("os", "-"))), net_cell, build_cell,
+            html.escape(str(r.get("cuda", "?"))),
             html.escape(str(r.get("project", "-"))), env, html.escape(r["ssh"]),
             float(r["dph"] or 0))
         p.append(row)
