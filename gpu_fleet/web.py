@@ -69,17 +69,27 @@ def build_html(rows, ts, refresh, err):
               "ram MB", "disk", "jobs", "cuda", "project", "env (py + libs)", "ssh", "$/hr"]:
         p.append("<th>%s</th>" % h)
     p.append("</tr></thead><tbody>")
+    def _bar(u):
+        uc = "#cf222e" if u >= 50 else ("#9a6700" if u >= 10 else "#1a7f37")
+        return ("<div style='background:#eee;border-radius:3px;width:55px;display:inline-block;vertical-align:middle'>"
+                "<div style='background:%s;width:%d%%;height:10px;border-radius:3px'></div></div> %d%%"
+                % (uc, min(u, 100), u))
+
     for r in rows:
         pr = r.get("probe") or {}
         util = pr.get("util")
+        gpus = pr.get("gpus") or []
         if util is None:
             ucell = "-"
+        elif len(gpus) > 1:
+            # per-GPU bars stacked for multi-GPU boxes
+            ucell = "<br>".join("g%d %s" % (g["idx"], _bar(g["util"])) for g in gpus)
         else:
-            uc = "#cf222e" if util >= 50 else ("#9a6700" if util >= 10 else "#1a7f37")
-            ucell = ("<div style='background:#eee;border-radius:3px;width:55px;display:inline-block;vertical-align:middle'>"
-                     "<div style='background:%s;width:%d%%;height:10px;border-radius:3px'></div></div> %d%%"
-                     % (uc, min(util, 100), util))
-        gmem = ("%s/%s" % (pr.get("mem_used", "?"), pr.get("mem_total", "?"))) if pr else "-"
+            ucell = _bar(util)
+        if len(gpus) > 1:
+            gmem = "<br>".join("g%d %s/%s" % (g["idx"], g["mem_used"], g["mem_total"]) for g in gpus)
+        else:
+            gmem = ("%s/%s" % (pr.get("mem_used", "?"), pr.get("mem_total", "?"))) if pr else "-"
         disk = ("%s %s" % (pr.get("disk", "-"), pr.get("disk_pct", ""))).strip() if pr else "-"
         try:
             dpct = int(str(pr.get("disk_pct", "0%")).rstrip("%"))

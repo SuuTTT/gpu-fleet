@@ -19,6 +19,8 @@ SSH_TIMEOUT = 14        # seconds per host; dead hosts must not stall the fleet
 
 _PROBE = r'''
 G=$(nvidia-smi --query-gpu=utilization.gpu,memory.used,memory.total --format=csv,noheader,nounits 2>/dev/null | head -1)
+NG=$(nvidia-smi --query-gpu=index --format=csv,noheader 2>/dev/null | grep -c .)
+GALL=$(nvidia-smi --query-gpu=index,utilization.gpu,memory.used,memory.total --format=csv,noheader,nounits 2>/dev/null | tr '\n' ';')
 C=$(nproc 2>/dev/null)
 L=$(cut -d' ' -f1 /proc/loadavg 2>/dev/null)
 R=$(free -m | awk '/Mem:/{print $3"/"$2}')
@@ -33,7 +35,11 @@ try:
         except Exception: return None
 except Exception:
     def v(p): return None
-libs=[('torch','torch'),('numpy','numpy'),('pandas','pandas'),('sklearn','scikit-learn'),('statsmodels','statsmodels'),('jax','jax'),('transformers','transformers'),('tf','tensorflow')]
+libs=[('torch','torch'),('jax','jax'),('mjx','mujoco-mjx'),('mujoco','mujoco'),
+      ('playground','playground'),('mujoco_playground','mujoco_playground'),
+      ('brax','brax'),('flax','flax'),('numpy','numpy'),('pandas','pandas'),
+      ('sklearn','scikit-learn'),('statsmodels','statsmodels'),
+      ('transformers','transformers'),('tf','tensorflow')]
 parts=["py%d.%d"%sys.version_info[:2]]
 for s,pkg in libs:
     ver=v(pkg)
@@ -41,7 +47,7 @@ for s,pkg in libs:
 print(";".join(parts))
 PY
 )
-echo "GPU=$G|CPU=$C|LOAD=$L|RAM=$R|DISK=$D|JOBS=$J|ENV=$E"
+echo "GPU=$G|NG=$NG|GALL=$GALL|CPU=$C|LOAD=$L|RAM=$R|DISK=$D|JOBS=$J|ENV=$E"
 '''
 
 
@@ -106,6 +112,28 @@ def _parse(line):
             out["util"] = int(float(u)); out["mem_used"] = int(float(mu)); out["mem_total"] = int(float(mt))
         except Exception:
             pass
+    # multi-GPU: parse every GPU on the box (GALL = "idx,util,used,total;...")
+    try:
+        out["ngpu"] = int(d.get("NG", "1") or 1)
+    except Exception:
+        out["ngpu"] = 1
+    gpus = []
+    for chunk in (d.get("GALL", "") or "").split(";"):
+        chunk = chunk.strip()
+        if not chunk or "," not in chunk:
+            continue
+        try:
+            idx, u, mu, mt = [x.strip() for x in chunk.split(",")[:4]]
+            gpus.append({"idx": int(idx), "util": int(float(u)),
+                         "mem_used": int(float(mu)), "mem_total": int(float(mt))})
+        except Exception:
+            pass
+    if gpus:
+        out["gpus"] = gpus
+        # box-level summary: max util across GPUs, total mem used
+        out["util"] = max(x["util"] for x in gpus)
+        out["mem_used"] = sum(x["mem_used"] for x in gpus)
+        out["mem_total"] = sum(x["mem_total"] for x in gpus)
     out["cpu"] = d.get("CPU", "?")
     out["load"] = d.get("LOAD", "?")
     out["ram"] = d.get("RAM", "?")
@@ -149,8 +177,12 @@ def collect():
     for i in insts:
         iid = i["id"]; p = probes.get(iid); a = assign.get(str(iid), {})
         eff_port = (p or {}).get("ssh_port", i.get("ssh_port", "?"))
+        gpu_name = i.get("gpu_name", "?")
+        ngpu = (p or {}).get("ngpu", 1)
+        if ngpu and ngpu > 1:
+            gpu_name = f"{gpu_name} x{ngpu}"
         rows.append({
-            "id": iid, "gpu": i.get("gpu_name", "?"), "status": i.get("actual_status", "?"),
+            "id": iid, "gpu": gpu_name, "status": i.get("actual_status", "?"),
             "host": i.get("ssh_host", "?"), "port": eff_port,
             "ssh": f"{i.get('ssh_host','?')}:{eff_port}",
             "dph": i.get("dph_total", 0), "cuda": i.get("cuda_max_good", "?"),
