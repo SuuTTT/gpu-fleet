@@ -1,0 +1,14 @@
+{
+  "_comment": "instance_id -> {project, note}. Shown in dashboard 'project' column. Edit freely.",
+  "38764529": {"project": "nbeatsx-dc", "note": "EPF iteration A (designated)"},
+  "38768212": {"project": "nbeatsx-dc", "note": "EPF iteration B (designated)"},
+  "38664456": {"project": "other-exp", "note": "reserved by user"},
+  "38751740": {"project": "other-exp", "note": "Titan V, reserved by user"},
+  "37457647": {"project": "-", "note": "RTX 2060, ssh9:17647 (api port+1), busy"},
+  "36660304": {"project": "-", "note": "RTX 4070 Ti, ssh8:20305 (api port+1), busy"},
+  "36994217": {"project": "-", "note": "RTX 2080 Ti, ssh1:34217 (api port+1), busy"},
+  "34824701": {"project": "-", "note": "RTX 3060, ssh5:24701 (api port+1), FREE"},
+  "37906248": {"project": "-", "note": "RTX 3060 'cantssh' - user logs in locally only"},
+  "38342607": {"project": "-", "note": "GTX 1660 S, FREE"},
+  "38702735": {"project": "-", "note": "RTX 3070 laptop, FREE"}
+}
