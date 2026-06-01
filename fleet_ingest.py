@@ -28,29 +28,46 @@ PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 5055
 _HERE = os.path.dirname(os.path.abspath(__file__))
 ASSIGN = os.environ.get("GPU_FLEET_ASSIGNMENTS") or os.path.join(_HERE, "assignments.json")
 NOTIFY_LOG = os.environ.get("FLEET_LOG") or os.path.join(_HERE, "notifications.log")
+STATUS_FILE = os.environ.get("FLEET_STATUS") or os.path.join(_HERE, "fleet_status.json")
 TOKEN = os.environ.get("FLEET_TOKEN", "")
 print(f"[fleet-ingest] assignments -> {ASSIGN}", flush=True)
+print(f"[fleet-ingest] status      -> {STATUS_FILE}", flush=True)
 print(f"[fleet-ingest] notifications -> {NOTIFY_LOG}", flush=True)
+
+def _load(path, default):
+    try:
+        return json.load(open(path)) if os.path.exists(path) else default
+    except Exception:
+        return default
 
 def handle_event(d):
     project = d.get("project", "remote-job")
     boxes = [str(b) for b in d.get("boxes", [])]
-    event = d.get("event", "?")
-    champ = d.get("champion")
+    event = d.get("event", "?")                          # start|ping|done|failed (any string ok)
+    detail = d.get("detail", "") or (("champ=" + d["champion"]) if d.get("champion") else "")
     ts = d.get("ts") or time.strftime("%Y-%m-%d %H:%M:%S")
-    note = f"{project} {event} {ts}" + (f" champ={champ}" if champ else "")
-    # 1) tag boxes in assignments.json (what the dashboard's project column shows)
-    try:
-        a = json.load(open(ASSIGN)) if os.path.exists(ASSIGN) else {}
-    except Exception:
-        a = {}
+    note = f"{project} {event} {ts}" + (f" {detail}" if detail else "")
+    done = event in ("done", "finished", "failed")
+    # 1) tag boxes in assignments.json (dashboard 'project' column). On done, mark freed.
+    a = _load(ASSIGN, {})
     for b in boxes:
-        a[b] = {"project": project, "note": note}
+        a[b] = {"project": (project if not done else f"{project}(done)"), "note": note}
     json.dump(a, open(ASSIGN, "w"), indent=2)
-    # 2) append a notification line
-    line = f"{ts}  {event:8s}  {project}  boxes={','.join(boxes)}" \
-           + (f"  champ={champ}" if champ else "") \
-           + (f"  {d.get('detail','')}" if d.get("detail") else "")
+    # 2) maintain per-project live status (the general 'what is each project doing' view)
+    s = _load(STATUS_FILE, {"projects": {}})
+    s.setdefault("projects", {})
+    pr = s["projects"].get(project, {"runs": []})
+    if event in ("start", "running") and not pr.get("started"):
+        pr["started"] = ts
+    pr.update({"state": event, "boxes": boxes or pr.get("boxes", []),
+               "detail": detail, "updated": ts, "host": d.get("host", pr.get("host", ""))})
+    pr.setdefault("runs", []).append({"event": event, "ts": ts, "detail": detail})
+    pr["runs"] = pr["runs"][-10:]
+    s["projects"][project] = pr
+    s["updated"] = ts
+    json.dump(s, open(STATUS_FILE, "w"), indent=2)
+    # 3) append a notification line
+    line = f"{ts}  {event:8s}  {project}  boxes={','.join(boxes)}" + (f"  {detail}" if detail else "")
     open(NOTIFY_LOG, "a").write(line + "\n")
     return note, len(boxes)
 

@@ -53,6 +53,14 @@ def main(argv=None):
     r.add_argument("--pip", default=None, help="pip packages to install before running")
     r.add_argument("--name", default=None, help="run name (log file prefix)")
 
+    rep = sub.add_parser("report", help="report this project's fleet usage to the center "
+                                        "(set FLEET_CENTER or FLEET_CENTER_SSH + FLEET_TOKEN)")
+    rep.add_argument("event", choices=["start", "running", "ping", "done", "finished", "failed"])
+    rep.add_argument("--project", required=True, help="project name (shown on the dashboard)")
+    rep.add_argument("--boxes", default="", help="comma-separated instance IDs you are using")
+    rep.add_argument("--detail", default="", help="free-text status (e.g. 'gen 3/8', 'epoch 40')")
+    rep.add_argument("--note", default="")
+
     a = ap.parse_args(argv)
 
     if a.cmd == "list":
@@ -72,6 +80,10 @@ def main(argv=None):
             host, port = res["ssh"].split(":")
             print(f"\nLaunched on {res['gpu']} ({res['ssh']}).")
             print(f"Tail logs:  ssh -i {core.SSH_KEY} -p {port} root@{host} 'tail -f {res['log']}'")
+    elif a.cmd == "report":
+        from .client import report
+        boxes = [b for b in a.boxes.split(",") if b]
+        print(report(a.event, project=a.project, boxes=boxes, detail=a.detail, note=a.note))
 
 
 if __name__ == "__main__":

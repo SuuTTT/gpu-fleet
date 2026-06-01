@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import html
 import json
+import os
 import threading
 import time
 from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -17,6 +18,36 @@ from . import core
 
 VCOLOR = {"FREE": "#1a7f37", "BUSY": "#9a6700", "OFFLINE": "#6e7781", "UNREACHABLE": "#cf222e"}
 _STATE = {"rows": None, "ts": 0.0, "err": None}
+
+# Live per-project status reported by jobs (via fleet_ingest -> fleet_status.json).
+_REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+STATUS_FILE = os.environ.get("FLEET_STATUS") or os.path.join(_REPO, "fleet_status.json")
+SCOLOR = {"start": "#0969da", "running": "#0969da", "ping": "#0969da",
+          "done": "#1a7f37", "finished": "#1a7f37", "failed": "#cf222e"}
+
+def _projects_panel():
+    try:
+        s = json.load(open(STATUS_FILE))
+    except Exception:
+        return ""
+    projs = s.get("projects", {})
+    if not projs:
+        return ""
+    rows = []
+    for name, p in sorted(projs.items(), key=lambda kv: kv[1].get("updated", ""), reverse=True):
+        st = p.get("state", "?")
+        col = SCOLOR.get(st, "#57606a")
+        boxes = ", ".join(p.get("boxes", []))
+        rows.append(
+            "<tr><td><b>%s</b></td><td><span style='color:%s;font-weight:bold'>%s</span></td>"
+            "<td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>" % (
+                html.escape(name), col, html.escape(st), html.escape(boxes),
+                html.escape(str(p.get("detail", ""))), html.escape(str(p.get("started", "-"))),
+                html.escape(str(p.get("updated", "-")))))
+    return ("<h2 style='font-size:16px;margin:18px 0 6px'>Projects (live, self-reported)</h2>"
+            "<table><thead><tr><th>project</th><th>state</th><th>boxes</th><th>detail</th>"
+            "<th>started</th><th>updated</th></tr></thead><tbody>"
+            + "".join(rows) + "</tbody></table>")
 
 
 def _vcolor(v):
@@ -64,6 +95,7 @@ def build_html(rows, ts, refresh, err):
          "<span class='pill' style='background:#0969da'>online %d/%d</span>" % (n_online, len(rows)),
          "<span class='pill' style='background:#57606a'>$%.3f/hr</span>" % total,
          "data %ds old &middot; auto-refresh %ds</div>" % (age, refresh),
+         _projects_panel(),
          "<table><thead><tr>"]
     for h in ["ID", "GPU", "state", "verdict", "GPU util", "gpu-mem MiB", "cpu", "load",
               "ram MB", "disk", "free GB", "jobs", "os", "net", "build", "cuda",
