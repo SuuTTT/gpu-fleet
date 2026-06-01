@@ -22,9 +22,15 @@ The remote side then sets:
 import json, os, sys, time, http.server, socketserver
 
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 5055
-ASSIGN = os.path.expanduser("~/gpu-fleet/assignments.json")
-NOTIFY_LOG = os.path.expanduser("~/gpu-fleet/notifications.log")
+# Robust to user/home: default to the assignments.json sitting NEXT TO this script
+# (i.e. the repo dir), and honor GPU_FLEET_ASSIGNMENTS — the SAME env the dashboard's
+# gpu_fleet/core.py reads — so both sides can be pinned to one file explicitly.
+_HERE = os.path.dirname(os.path.abspath(__file__))
+ASSIGN = os.environ.get("GPU_FLEET_ASSIGNMENTS") or os.path.join(_HERE, "assignments.json")
+NOTIFY_LOG = os.environ.get("FLEET_LOG") or os.path.join(_HERE, "notifications.log")
 TOKEN = os.environ.get("FLEET_TOKEN", "")
+print(f"[fleet-ingest] assignments -> {ASSIGN}", flush=True)
+print(f"[fleet-ingest] notifications -> {NOTIFY_LOG}", flush=True)
 
 def handle_event(d):
     project = d.get("project", "remote-job")
