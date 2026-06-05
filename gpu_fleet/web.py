@@ -143,13 +143,13 @@ def build_html(rows, ts, refresh, err):
                "<td>%s</td><td>%s</td><td>%s</td><td%s>%s</td><td>%s</td><td>%s</td>"
                "<td>%s</td><td>%s</td><td>%s</td><td>%s</td>"
                "<td>%s</td><td style='font-size:11px'>%s</td><td>%s</td><td>%.3f</td></tr>") % (
-            r["id"], html.escape(r["gpu"]), html.escape(r["status"]),
+            r["id"], html.escape(str(r["gpu"] or "-")), html.escape(str(r["status"] or "-")),
             _vcolor(r["verdict"]), r["verdict"], ucell, gmem,
             pr.get("cpu", "-"), pr.get("load", "-"), pr.get("ram", "-"),
             dstyle, disk, ("%sG" % dfree if dfree not in ("-", "?") else "-"),
             pr.get("jobs", "-"), html.escape(str(pr.get("os", "-"))), net_cell, build_cell,
             html.escape(str(r.get("cuda", "?"))),
-            html.escape(str(r.get("project", "-"))), env, html.escape(r["ssh"]),
+            html.escape(str(r.get("project", "-"))), env, html.escape(str(r["ssh"] or "-")),
             float(r["dph"] or 0))
         p.append(row)
     p.append("</tbody></table>")

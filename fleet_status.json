@@ -1,0 +1,269 @@
+{
+  "projects": {
+    "mahjong-pbt": {
+      "runs": [
+        {
+          "event": "start",
+          "ts": "2026-06-01 06:54:43",
+          "detail": "PBT champion gen2 deployed"
+        },
+        {
+          "event": "done",
+          "ts": "2026-06-01 06:55:20",
+          "detail": "champion gen2 (+968 vs poolbig); deploy pbt_champion_fp16.npz"
+        }
+      ],
+      "started": "2026-06-01 06:54:43",
+      "state": "done",
+      "boxes": [
+        "36994217",
+        "38702735",
+        "38664456"
+      ],
+      "detail": "champion gen2 (+968 vs poolbig); deploy pbt_champion_fp16.npz",
+      "updated": "2026-06-01 06:55:20",
+      "host": ""
+    },
+    "glass-tdmpc": {
+      "runs": [
+        {
+          "event": "start",
+          "ts": "2026-06-01 16:04:18",
+          "detail": "iteration-11: clean off-handoff Glass vs TD-MPC2 K256 baseline (362)"
+        }
+      ],
+      "started": "2026-06-01 16:04:18",
+      "state": "running",
+      "boxes": [
+        "36994217",
+        "38664456",
+        "38768950",
+        "38767427",
+        "38751740",
+        "38766691",
+        "37457647",
+        "34824701",
+        "38702735"
+      ],
+      "detail": "iter11 phasei11a off@1M (TIE ~375, 1/5 G1); phasei11b off@2M+temp queued; goal: clean >=3/5 G1 > baseline 362",
+      "updated": "2026-06-01 16:04:18",
+      "host": "aws-center"
+    },
+    "mahjong-league": {
+      "runs": [
+        {
+          "event": "running",
+          "ts": "2026-06-02 07:36:28",
+          "detail": "round 7 \u00b7 train \u00b7 champ r5:mai2735 \u00b7 3 promotions \u00b7 9 boxes / 84.6 cores"
+        },
+        {
+          "event": "running",
+          "ts": "2026-06-02 07:37:12",
+          "detail": "round 7 \u00b7 train \u00b7 champ r5:mai2735 \u00b7 3 promotions \u00b7 9 boxes / 84.6 cores"
+        },
+        {
+          "event": "running",
+          "ts": "2026-06-02 07:37:57",
+          "detail": "round 7 \u00b7 train \u00b7 champ r5:mai2735 \u00b7 3 promotions \u00b7 9 boxes / 84.6 cores"
+        },
+        {
+          "event": "running",
+          "ts": "2026-06-02 07:38:51",
+          "detail": "round 7 \u00b7 train \u00b7 champ r5:mai2735 \u00b7 3 promotions \u00b7 9 boxes / 84.6 cores"
+        },
+        {
+          "event": "running",
+          "ts": "2026-06-02 07:39:54",
+          "detail": "round 7 \u00b7 rank \u00b7 champ r5:mai2735 \u00b7 3 promotions \u00b7 9 boxes / 84.6 cores"
+        },
+        {
+          "event": "running",
+          "ts": "2026-06-02 07:40:38",
+          "detail": "round 7 \u00b7 rank \u00b7 champ r5:mai2735 \u00b7 3 promotions \u00b7 9 boxes / 84.6 cores"
+        },
+        {
+          "event": "running",
+          "ts": "2026-06-02 07:41:22",
+          "detail": "round 7 \u00b7 rank \u00b7 champ r5:mai2735 \u00b7 3 promotions \u00b7 9 boxes / 84.6 cores"
+        },
+        {
+          "event": "running",
+          "ts": "2026-06-02 07:42:06",
+          "detail": "round 7 \u00b7 rank \u00b7 champ r5:mai2735 \u00b7 3 promotions \u00b7 9 boxes / 84.6 cores"
+        },
+        {
+          "event": "running",
+          "ts": "2026-06-02 07:42:49",
+          "detail": "round 7 \u00b7 rank \u00b7 champ r5:mai2735 \u00b7 3 promotions \u00b7 9 boxes / 84.6 cores"
+        },
+        {
+          "event": "running",
+          "ts": "2026-06-02 07:43:33",
+          "detail": "round 7 \u00b7 confirm \u00b7 champ r5:mai2735 \u00b7 3 promotions \u00b7 9 boxes / 84.6 cores"
+        }
+      ],
+      "started": "2026-06-01 17:26:18",
+      "state": "running",
+      "boxes": [
+        "36994217",
+        "38702735",
+        "38751740",
+        "38664456",
+        "39016822",
+        "38764529",
+        "38766691",
+        "38767427",
+        "38768950"
+      ],
+      "detail": "round 7 \u00b7 confirm \u00b7 champ r5:mai2735 \u00b7 3 promotions \u00b7 9 boxes / 84.6 cores",
+      "updated": "2026-06-02 07:43:33",
+      "host": ""
+    },
+    "nbeatsx-dc": {
+      "runs": [
+        {
+          "event": "running",
+          "ts": "2026-06-02 05:07:55",
+          "detail": "EPF SOTA chase: N-BEATSx (neuralforecast) config search, 5 markets (NP/PJM/BE/FR/DE)"
+        },
+        {
+          "event": "running",
+          "ts": "2026-06-02 06:03:00",
+          "detail": "Ensemble N-BEATSx+LEAR within +4.7% of SOTA mean (PJM matched); next: canonical LEAR + learned combiner"
+        },
+        {
+          "event": "running",
+          "ts": "2026-06-02 06:17:55",
+          "detail": "N-BEATSx+LEAR ensemble: PJM BEATS SOTA, mean +4.6%; pushing NP/DE gap markets"
+        },
+        {
+          "event": "running",
+          "ts": "2026-06-02 07:21:10",
+          "detail": "Online-aggregation combiner: mean +3.3% vs SOTA, beats PJM, BE/FR within 2-3%; NP/DE holdouts"
+        },
+        {
+          "event": "running",
+          "ts": "2026-06-02 07:48:23",
+          "detail": "BEAT SOTA on ALL 5 markets (mean -2.6%) via leakage-free online ensemble; adding Chronos foundation member"
+        },
+        {
+          "event": "done",
+          "ts": "2026-06-02 07:56:35",
+          "detail": "BEAT published N-BEATSx on all 5 EPF markets (mean -2.6%) via leakage-free online ensemble; Chronos weak (ignores exog); blog updated"
+        }
+      ],
+      "started": "2026-06-02 05:07:55",
+      "state": "done",
+      "boxes": [
+        "38768212",
+        "38764529",
+        "38702735"
+      ],
+      "detail": "BEAT published N-BEATSx on all 5 EPF markets (mean -2.6%) via leakage-free online ensemble; Chronos weak (ignores exog); blog updated",
+      "updated": "2026-06-02 07:56:35",
+      "host": "aws-center"
+    },
+    "ltsf-ensemble": {
+      "runs": [
+        {
+          "event": "running",
+          "ts": "2026-06-02 20:27:29",
+          "detail": "8h campaign | ssh1:  | ssh2: POOL_MODEL=iTransformer DS=Traffic 17:02:56"
+        },
+        {
+          "event": "running",
+          "ts": "2026-06-02 20:52:37",
+          "detail": "8h campaign | ssh1:  | ssh2: POOL_MODEL=iTransformer DS=Traffic 17:02:56"
+        },
+        {
+          "event": "running",
+          "ts": "2026-06-02 21:03:14",
+          "detail": "CONSOLIDATED (analysis on ssh2): online ensemble beats best-single SOTA 21/21 cells (ETT16+Exchange4+Weather1). Weather/ECL/Traffic full pool needs on-box analysis (center 1GB RAM cant relay big preds)"
+        },
+        {
+          "event": "running",
+          "ts": "2026-06-02 21:17:45",
+          "detail": "8h campaign | ssh1:  | ssh2: POOL_MODEL=iTransformer DS=Traffic 17:02:56"
+        },
+        {
+          "event": "running",
+          "ts": "2026-06-02 21:42:52",
+          "detail": "8h campaign | ssh1:  | ssh2: POOL_MODEL=iTransformer DS=Traffic 17:02:56"
+        },
+        {
+          "event": "running",
+          "ts": "2026-06-02 22:08:00",
+          "detail": "8h campaign | ssh1:  | ssh2: POOL_MODEL=iTransformer DS=Traffic 17:02:56"
+        },
+        {
+          "event": "running",
+          "ts": "2026-06-02 22:33:08",
+          "detail": "8h campaign | ssh1:  | ssh2: POOL_MODEL=iTransformer DS=Traffic 17:02:56"
+        },
+        {
+          "event": "done",
+          "ts": "2026-06-02 22:56:06",
+          "detail": "DONE: GPU training complete; rigorous online ensemble (ssh2) beats best-single SOTA 20/20 ETT+Exchange cells, DM-sig majority. ECL/Traffic/full-Weather deferred (disk)."
+        },
+        {
+          "event": "running",
+          "ts": "2026-06-02 22:58:16",
+          "detail": "8h campaign | ssh1:  | ssh2: POOL_MODEL=iTransformer DS=Traffic 17:02:56"
+        },
+        {
+          "event": "running",
+          "ts": "2026-06-02 23:23:24",
+          "detail": "8h campaign | ssh1:  | ssh2: POOL_MODEL=iTransformer DS=Traffic 17:02:56"
+        }
+      ],
+      "started": "2026-06-02 12:20:51",
+      "state": "running",
+      "boxes": [
+        "38764529",
+        "38768212"
+      ],
+      "detail": "8h campaign | ssh1:  | ssh2: POOL_MODEL=iTransformer DS=Traffic 17:02:56",
+      "updated": "2026-06-02 23:23:24",
+      "host": "aws-center"
+    },
+    "se-bench": {
+      "runs": [
+        {
+          "event": "start",
+          "ts": "2026-06-02 18:23:39",
+          "detail": "SE benchmark campaign: 2 RTX 3060 rented for community-detection repro"
+        },
+        {
+          "event": "running",
+          "ts": "2026-06-03 06:49:37",
+          "detail": "Phase2 SEP graph-pooling (3 GPU) + attr baselines; Phase1 CD done"
+        },
+        {
+          "event": "running",
+          "ts": "2026-06-03 12:38:50",
+          "detail": "SI2E(RL) training; SE-GSL+SEP(GL) reproduced; Phase1 CD done \u2014 all 3 SE families validated"
+        },
+        {
+          "event": "done",
+          "ts": "2026-06-04 11:49:05",
+          "detail": "Campaign complete \u2014 all 5 families benchmarked + blog/code/paper published. GPUs idle, no further runs."
+        }
+      ],
+      "started": "2026-06-02 18:23:39",
+      "state": "done",
+      "boxes": [
+        "39169948",
+        "39169963",
+        "38764529",
+        "38768212",
+        "38767427",
+        "38702735",
+        "38342607"
+      ],
+      "detail": "Campaign complete \u2014 all 5 families benchmarked + blog/code/paper published. GPUs idle, no further runs.",
+      "updated": "2026-06-04 11:49:05",
+      "host": "aws-center"
+    }
+  },
+  "updated": "2026-06-04 11:49:05"
+}

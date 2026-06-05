@@ -1,0 +1,55 @@
+{
+  "_comment": "instance_id -> {project, note}. Shown in dashboard 'project' column. Edit freely.",
+  "36994217": {
+    "project": "mahjong-pbt",
+    "note": "mahjong-pbt start 2026-06-01 06:54:43 PBT champion gen2 deployed"
+  },
+  "38664456": {
+    "project": "mahjong-pbt",
+    "note": "mahjong-pbt start 2026-06-01 06:54:43 PBT champion gen2 deployed"
+  },
+  "38768950": {
+    "project": "glass-tdmpc",
+    "note": "A4000 16GB, jax+mujoco_playground (ssh2:18950)"
+  },
+  "38767427": {
+    "project": "glass-tdmpc",
+    "note": "A4000 16GB, jax+mujoco_playground (ssh3:17426)"
+  },
+  "38751740": {
+    "project": "glass-tdmpc",
+    "note": "Titan V 12GB, jax+mujoco_playground (ssh6:31740)"
+  },
+  "38766691": {
+    "project": "glass-tdmpc",
+    "note": "A4000 16GB, jax+mujoco_playground (ssh9:16690)"
+  },
+  "37457647": {
+    "project": "glass-tdmpc",
+    "note": "4x RTX 2060 6GB, jax+mujoco_playground, gpu0-3 (ssh9:17647)"
+  },
+  "36660304": {
+    "project": "glass-tdmpc?",
+    "note": "4070 Ti 12GB - possibly the 'local' glass box (ssh8:20305)"
+  },
+  "38764529": {
+    "project": "nbeatsx-dc",
+    "note": "A4000 EPF iteration (designated)"
+  },
+  "38768212": {
+    "project": "nbeatsx-dc",
+    "note": "A4000 EPF iteration (designated)"
+  },
+  "38702735": {
+    "project": "mahjong-pbt",
+    "note": "mahjong-pbt start 2026-06-01 06:54:43 PBT champion gen2 deployed"
+  },
+  "34824701": {
+    "project": "-",
+    "note": "RTX 3060 (ssh5:24701, api port+1)"
+  },
+  "37906248": {
+    "project": "-",
+    "note": "RTX 3060 'cantssh' - user logs in locally"
+  }
+}

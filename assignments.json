@@ -1,16 +1,79 @@
 {
   "_comment": "instance_id -> {project, note}. Shown in dashboard 'project' column. Edit freely.",
-  "36994217": {"project": "glass-tdmpc", "note": "2080 Ti 22GB, jax+mujoco_playground (ssh1:34217)"},
-  "38664456": {"project": "glass-tdmpc", "note": "A4000 16GB, jax+mujoco_playground (ssh1:24456)"},
-  "38768950": {"project": "glass-tdmpc", "note": "A4000 16GB, jax+mujoco_playground (ssh2:18950)"},
-  "38767427": {"project": "glass-tdmpc", "note": "A4000 16GB, jax+mujoco_playground (ssh3:17426)"},
-  "38751740": {"project": "glass-tdmpc", "note": "Titan V 12GB, jax+mujoco_playground (ssh6:31740)"},
-  "38766691": {"project": "glass-tdmpc", "note": "A4000 16GB, jax+mujoco_playground (ssh9:16690)"},
-  "37457647": {"project": "glass-tdmpc", "note": "4x RTX 2060 6GB, jax+mujoco_playground, gpu0-3 (ssh9:17647)"},
-  "36660304": {"project": "glass-tdmpc?", "note": "4070 Ti 12GB - possibly the 'local' glass box (ssh8:20305)"},
-  "38764529": {"project": "nbeatsx-dc", "note": "A4000 EPF iteration (designated)"},
-  "38768212": {"project": "nbeatsx-dc", "note": "A4000 EPF iteration (designated)"},
-  "38702735": {"project": "-", "note": "RTX 3070 laptop, free"},
-  "34824701": {"project": "-", "note": "RTX 3060 (ssh5:24701, api port+1)"},
-  "37906248": {"project": "-", "note": "RTX 3060 'cantssh' - user logs in locally"}
+  "36994217": {
+    "project": "mahjong-league",
+    "note": "mahjong-league running 2026-06-02 07:43:33 round 7 \u00b7 confirm \u00b7 champ r5:mai2735 \u00b7 3 promotions \u00b7 9 boxes / 84.6 cores"
+  },
+  "38664456": {
+    "project": "mahjong-league",
+    "note": "mahjong-league running 2026-06-02 07:43:33 round 7 \u00b7 confirm \u00b7 champ r5:mai2735 \u00b7 3 promotions \u00b7 9 boxes / 84.6 cores"
+  },
+  "38768950": {
+    "project": "ltsf-tslib-bench",
+    "note": "TSLib iTransformer-vs-MultiRel standard-protocol PEMS benchmark, running 2026-06-05; make-or-break for publishing multirel (task #10)"
+  },
+  "38767427": {
+    "project": "ltsf-multirel(done)",
+    "note": "LTSF PEMS multi-relational sweep DONE 2026-06-05; multirel -15..-25% MSE vs full on PEMS03/04/08 (4-seed, INTERNAL baseline); awaiting TSLib standard-protocol check"
+  },
+  "38751740": {
+    "project": "mahjong-league",
+    "note": "mahjong-league running 2026-06-02 07:43:33 round 7 \u00b7 confirm \u00b7 champ r5:mai2735 \u00b7 3 promotions \u00b7 9 boxes / 84.6 cores"
+  },
+  "38766691": {
+    "project": "epf-reproduction",
+    "note": "EPF N-BEATSx reproduction (LEAR/DNN via epftoolbox), running 2026-06-05; 2 LEAR members reproduced (NP cw364=2.04); priority paper (task #9)"
+  },
+  "37457647": {
+    "project": "mahjong-league",
+    "note": "mahjong-league running 2026-06-01 20:01:22 round 0 \u00b7 setup \u00b7 champ gen2 \u00b7 0 promotions \u00b7 10 boxes / 135.6 cores"
+  },
+  "36660304": {
+    "project": "glass-tdmpc?",
+    "note": "4070 Ti 12GB - possibly the 'local' glass box (ssh8:20305)"
+  },
+  "38764529": {
+    "project": "se-bench(done)",
+    "note": "se-bench done 2026-06-04 11:49:05 Campaign complete \u2014 all 5 families benchmarked + blog/code/paper published. GPUs idle, no further runs."
+  },
+  "38768212": {
+    "project": "se-bench(done)",
+    "note": "se-bench done 2026-06-04 11:49:05 Campaign complete \u2014 all 5 families benchmarked + blog/code/paper published. GPUs idle, no further runs."
+  },
+  "38702735": {
+    "project": "se-bench(done)",
+    "note": "se-bench done 2026-06-04 11:49:05 Campaign complete \u2014 all 5 families benchmarked + blog/code/paper published. GPUs idle, no further runs."
+  },
+  "34824701": {
+    "project": "glass-tdmpc",
+    "note": "RTX 3060 12GB (ssh5:24701) - tdmpc env bootstrapping"
+  },
+  "37906248": {
+    "project": "mahjong-league",
+    "note": "mahjong-league running 2026-06-01 20:01:22 round 0 \u00b7 setup \u00b7 champ gen2 \u00b7 0 promotions \u00b7 10 boxes / 135.6 cores"
+  },
+  "39016822": {
+    "project": "mahjong-league",
+    "note": "mahjong-league running 2026-06-02 07:43:33 round 7 \u00b7 confirm \u00b7 champ r5:mai2735 \u00b7 3 promotions \u00b7 9 boxes / 84.6 cores"
+  },
+  "18212": {
+    "project": "ltsf-ensemble(done)",
+    "note": "ltsf-ensemble done 2026-06-02 22:56:06 DONE: GPU training complete; rigorous online ensemble (ssh2) beats best-single SOTA 20/20 ETT+Exchange cells, DM-sig majority. ECL/Traffic/full-Weather deferred (disk)."
+  },
+  "22734": {
+    "project": "ltsf-ensemble(done)",
+    "note": "ltsf-ensemble done 2026-06-02 22:56:06 DONE: GPU training complete; rigorous online ensemble (ssh2) beats best-single SOTA 20/20 ETT+Exchange cells, DM-sig majority. ECL/Traffic/full-Weather deferred (disk)."
+  },
+  "39169948": {
+    "project": "se-bench(done)",
+    "note": "se-bench done 2026-06-04 11:49:05 Campaign complete \u2014 all 5 families benchmarked + blog/code/paper published. GPUs idle, no further runs."
+  },
+  "39169963": {
+    "project": "se-bench(done)",
+    "note": "se-bench done 2026-06-04 11:49:05 Campaign complete \u2014 all 5 families benchmarked + blog/code/paper published. GPUs idle, no further runs."
+  },
+  "38342607": {
+    "project": "se-bench(done)",
+    "note": "se-bench done 2026-06-04 11:49:05 Campaign complete \u2014 all 5 families benchmarked + blog/code/paper published. GPUs idle, no further runs."
+  }
 }
